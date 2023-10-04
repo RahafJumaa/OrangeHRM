@@ -2,6 +2,7 @@
   "compilerOptions": {
     "resolveJsonModule": true,
     "target": "ES2018",
+    "lib": ["es5", "dom"],
     "module": "commonjs",
     "rootDir": "cypress",
     "skipLibCheck": true,
@@ -21,7 +22,8 @@
       "cypress-wait-until",
       "@types/testing-library__cypress"
     ],
-    "esModuleInterop": true
+    "esModuleInterop": true,
   },
+  "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }
