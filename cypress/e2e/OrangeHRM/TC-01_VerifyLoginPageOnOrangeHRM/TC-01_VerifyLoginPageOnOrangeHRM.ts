@@ -27,9 +27,7 @@ And("The Login button should appear", () => {
 //---------
 
 When("The user login as admin with valid username and password credentials", () => {
-  loginActions.typeInUsernameField("Admin");
-  loginActions.typeInPasswordField("admin123");
-  loginActions.clickOnLoginButton();
+  cy.login("Admin","admin123");
 });
 
 
@@ -50,9 +48,7 @@ Then("A message stating that the fields are required should appear", () => {
 //--------
 
 When("The user login as admin with invalid username and password credentials", () => {
-  loginActions.typeInUsernameField("r");
-  loginActions.typeInPasswordField("r");
-  loginActions.clickOnLoginButton();
+  cy.login("r","r");
 });
 
 Then("A message stating that the credentials are invalid should appear", () => {
