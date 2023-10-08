@@ -2,37 +2,18 @@ import {Given, Then, When , And} from "@badeball/cypress-cucumber-preprocessor";
 import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
 import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
 
-let addEmployeeActions : actions = new actions();
-let addEmployeeAssertions : assertions = new assertions();
+const addEmployeeActions = new actions();
+const addEmployeeAssertions : assertions = new assertions();
 
-Then("The Add Employee title should appear", () => {
-    addEmployeeAssertions.viewAddEmployeeTitle();
+  Then("The Add Employee page should be open correctly", () => {
+    addEmployeeAssertions.checkAddEmployeeTitle();
+    addEmployeeAssertions.checkAddPictureButton();
+    addEmployeeAssertions.checkFullNameFields();
+    addEmployeeAssertions.checkIDField();
+    addEmployeeAssertions.checkCreateLoginDetails();
+    addEmployeeAssertions.checkSaveButton();
+    addEmployeeAssertions.checkCancelButton();
   });
-  
-  And("A button to add a photo should appear", () => {
-    addEmployeeAssertions.viewAddPictureButton();
-  }); 
-  And("The Employee Full Name fields should appear", () => {
-    addEmployeeAssertions.viewFullNameFields();
-  });
-  
-  And("The Employee Id field should appear with default number", () => {
-    addEmployeeAssertions.viewIDField();
-  });
-
-  And("The Create Login Details option should be disable", () => {
-    addEmployeeAssertions.viewCreateLoginDetails();;
-  });
-  
-  And("The Save button should appear", () => {
-    addEmployeeAssertions.viewSaveButton();
-  });
-
-  And("The Cancel button should appear", () => {
-    addEmployeeAssertions.viewCancelButton();
-  });
-
-//-----------
 
   When("The user clicks on the Save button", () => {
     cy.wait(5000);
@@ -40,10 +21,8 @@ Then("The Add Employee title should appear", () => {
   });
 
   Then("A message stating that the fields are required should appear", () => {
-    addEmployeeAssertions.requiredMessage();
+    addEmployeeAssertions.checkRequiredMessageAppear();
   });
-
-  //-----------
 
   When("The user clicks on the Cancel button", () => {
     cy.wait(5000);
@@ -51,115 +30,83 @@ Then("The Add Employee title should appear", () => {
   });
 
   Then("The user should navigate to Employee List page", () => {
-    addEmployeeAssertions.navigateToEmployeeListPage();
+    addEmployeeAssertions.checkEmployeeListHeaderAppear();
   });
-
-  //--------
 
   When("the user enable the Create Login Details option", () => {
     addEmployeeActions.enableCreateLoginDetails();
-
   });
 
-  Then("The Username field should appear", () => {
-    addEmployeeAssertions.viewUsernameField();
-
+  Then("The Create Login Details fields should appear", () => {
+    addEmployeeAssertions.checkUsernameField();
+    addEmployeeAssertions.checkPasswordField();
+    addEmployeeAssertions.checkConfirmPasswordField();
+    addEmployeeAssertions.checkStatus();
   });
-
-  And("The Password field should appear", () => {
-    addEmployeeAssertions.viewPasswordField();
-
-  });
-
-  And("The Confirm Password field should appear", () => {
-    addEmployeeAssertions.viewConfirmPasswordField();
-
-  });
-
-  And("The Status option should appear", () => {
-    addEmployeeAssertions.viewStatus();
-
-  });
-
-  //--------
 
   When("the user enter a valid full name into Employee Full Name fields", () => {
     cy.wait(5000);
-    addEmployeeActions.typeIntoFirstNameField("Rahaf");
-    addEmployeeActions.typeIntoMiddleNameField("Suliman");
-    addEmployeeActions.typeIntoLastNameField("Jumaa");
+    addEmployeeActions.typeIntoFirstNameField("Rahaf").typeIntoMiddleNameField("Suliman").typeIntoLastNameField("Jumaa");
   });
 
-  And("the user enter a valid id into Employee Id field", () => {
+  When("the user enter a valid id into Employee Id field", () => {
     addEmployeeActions.typeIntoIDField("0285");
   });
 
-  And("the user upload an image for the employee", () => {
+  When("the user upload an image for the employee", () => {
     addEmployeeActions.addphoto();
   });
 
-  And("the user enter a valid username into Username field", () => {
+  When("the user enter a valid username into Username field", () => {
     addEmployeeActions.typeIntoUserNameField("rahaf");
   });
 
-  And("the user enter a valid password into Password field", () => {
+  When("the user enter a valid password into Password field", () => {
     addEmployeeActions.typeIntoPasswordField("rahaf123");
   });
 
-  And("the user enter a valid confirm password into Confirm Password field", () => {
+  When("the user enter a valid confirm password into Confirm Password field", () => {
     addEmployeeActions.typeIntoConfirmPasswordField("rahaf123");
   });
 
- // And("the user choose the status for the employee", () => {
-   // addEmployeeActions.chooseStatus();
-  //});
-
-  And("the user clicks on the Save button", () => {
+  When("the user clicks on the Save button", () => {
     addEmployeeActions.clickOnSaveButton();
   });
 
-  Then("the user should navigate to Personal Details page", () => {
-    addEmployeeAssertions.navigateToPersonalDetails();
+  Then("the emolyee should be added successfully", () => {
+    addEmployeeAssertions.checkPersonalDetailsHeaderAppear();
   });
 
-  //---------
-
-  And ("the user enter an existence username into Username field", () => {
+  When ("the user enter an existence username into Username field", () => {
     addEmployeeActions.typeIntoUserNameField("rahaf");
   });
 
   Then("A message stating that Username already exists should appear", () => {
-    addEmployeeAssertions.viewUsernameExists();
+    addEmployeeAssertions.checkUsernameExistsMessageAppear();
   });
 
-  //--------
-
-  And ("the user enter a different confirm password into Confirm Password field", () => {
+  When ("the user enter a different confirm password into Confirm Password field", () => {
     addEmployeeActions.typeIntoConfirmPasswordField("roro");
   });
 
   Then("A message stating that Passwords do not match should appear", () => {
-    addEmployeeAssertions.viewPasswordNotMatch();
+    addEmployeeAssertions.checkPasswordNotMatchMessageAppear();
   });
 
-//--------
-
-And ("the user enter a username with less than 5 characters into Username field", () => {
+When ("the user enter a username with less than 5 characters into Username field", () => {
   addEmployeeActions.typeIntoUserNameField("roro");
 });
 
 Then("A message stating that Should be at least 5 characters should appear", () => {
-  addEmployeeAssertions.viewUsernameCharacters();
+  addEmployeeAssertions.checkShouldBeAtLeast5CharactersMessageAppear();
 });
 
-//-------
-
-And ("the user enter a password with less than 7 characters into Password field", () => {
+When ("the user enter a password with less than 7 characters into Password field", () => {
   addEmployeeActions.typeIntoPasswordField("roro");
 });
 
 Then("A message stating that Should be at least 7 characters should appear", () => {
-  addEmployeeAssertions.viewPasswordCharacters();
+  addEmployeeAssertions.checkShouldBeAtLeast7CharactersMessageAppear();
 });
 
 

@@ -1,13 +1,17 @@
 class actions{
+    public n ;
 openLoginPage (){
     cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
 }
+
  typeInUsernameField (username : string){
-    cy.get("[name=username]").clear().type(username);
+    this.n = cy.get("[name=username]").clear().type(username);
+    return this;
 }
 
  typeInPasswordField (password : string){
-    cy.get("[name=password]").clear().type(password);
+    this.n = cy.get("[name=password]").clear().type(password);
+    return this;
 }
 
  clickOnLoginButton (){

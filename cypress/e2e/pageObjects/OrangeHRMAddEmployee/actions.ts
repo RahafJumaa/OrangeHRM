@@ -1,9 +1,10 @@
 class actions{
+    public n;
     navigateToAddEmployeePage(){
         cy.get("span").contains("PIM").click();
         cy.get("button").contains("Add").click();
     }
-
+    
     clickOnSaveButton(){
         cy.get("[type=submit]").contains("Save").click();
     }
@@ -19,15 +20,18 @@ class actions{
     }
 
     typeIntoFirstNameField(firstname :string){
-        cy.get("[name=firstName]").clear().type(firstname);
+        this.n = cy.get("[name=firstName]").clear().type(firstname);
+        return this;
     }
 
     typeIntoMiddleNameField(middlename :string){
-        cy.get("[name=middleName]").clear().type(middlename);
+        this.n = cy.get("[name=middleName]").clear().type(middlename);
+        return this;
     }
 
     typeIntoLastNameField(lastname :string){
-        cy.get("[name=lastName]").clear().type(lastname);
+        this.n = cy.get("[name=lastName]").clear().type(lastname);
+        return this;
     }
 
     typeIntoIDField(id :string){
@@ -54,8 +58,5 @@ class actions{
     chooseStatus(){
         cy.get(':nth-child(2) > :nth-child(2) > .oxd-radio-wrapper').check();
     }
-
-
-
 }
 export default actions
