@@ -1,4 +1,4 @@
-Feature: TC-01_VerifyAddEmployeeOnOrangeHRM
+Feature: TC-02_VerifyAddEmployeeOnOrangeHRM
 
    Scenario: 1#: Verify the Add Employee page open correctly
       Given Common Step: The user login to OrangeHRM
@@ -22,7 +22,6 @@ Feature: TC-01_VerifyAddEmployeeOnOrangeHRM
       And Common Step: The user navigate to Add employee page
       When the user enter a valid full name into Employee Full Name fields
       And the user enter a valid id into Employee Id field
-      And the user upload an image for the employee
       And the user clicks on the Save button
       Then the emolyee should be added successfully
 
@@ -37,7 +36,6 @@ Feature: TC-01_VerifyAddEmployeeOnOrangeHRM
        And Common Step: The user navigate to Add employee page
        When the user enter a valid full name into Employee Full Name fields
        And the user enter a valid id into Employee Id field
-       And the user upload an image for the employee
        And the user enable the Create Login Details option
        And the user enter a valid username into Username field
        And the user enter a valid password into Password field

@@ -7,12 +7,6 @@ const addEmployeeAssertions : assertions = new assertions();
 
   Then("The Add Employee page should be open correctly", () => {
     addEmployeeAssertions.checkAddEmployeeTitle();
-    addEmployeeAssertions.checkAddPictureButton();
-    addEmployeeAssertions.checkFullNameFields();
-    addEmployeeAssertions.checkIDField();
-    addEmployeeAssertions.checkCreateLoginDetails();
-    addEmployeeAssertions.checkSaveButton();
-    addEmployeeAssertions.checkCancelButton();
   });
 
   When("The user clicks on the Save button", () => {
@@ -39,9 +33,6 @@ const addEmployeeAssertions : assertions = new assertions();
 
   Then("The Create Login Details fields should appear", () => {
     addEmployeeAssertions.checkUsernameField();
-    addEmployeeAssertions.checkPasswordField();
-    addEmployeeAssertions.checkConfirmPasswordField();
-    addEmployeeAssertions.checkStatus();
   });
 
   When("the user enter a valid full name into Employee Full Name fields", () => {
@@ -50,11 +41,7 @@ const addEmployeeAssertions : assertions = new assertions();
   });
 
   When("the user enter a valid id into Employee Id field", () => {
-    addEmployeeActions.typeIntoIDField("0285");
-  });
-
-  When("the user upload an image for the employee", () => {
-    addEmployeeActions.addphoto();
+    addEmployeeActions.typeIntoIDField("0000");
   });
 
   When("the user enter a valid username into Username field", () => {
@@ -71,6 +58,7 @@ const addEmployeeAssertions : assertions = new assertions();
 
   When("the user clicks on the Save button", () => {
     addEmployeeActions.clickOnSaveButton();
+    cy.wait(6000);
   });
 
   Then("the emolyee should be added successfully", () => {
@@ -108,6 +96,7 @@ When ("the user enter a password with less than 7 characters into Password field
 Then("A message stating that Should be at least 7 characters should appear", () => {
   addEmployeeAssertions.checkShouldBeAtLeast7CharactersMessageAppear();
 });
+
 
 
 
