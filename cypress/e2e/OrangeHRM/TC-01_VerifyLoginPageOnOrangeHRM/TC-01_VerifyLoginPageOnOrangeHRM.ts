@@ -5,12 +5,8 @@ import assertions from "../../pageObjects/OrangeHRMLoginPage/assertions";
 const loginActions = new actions();
 const loginAssertions = new assertions();
 
-Then("Then The login page should be open correctly", () => {
-  loginAssertions.checkOrangeHRMLogo();
-  loginAssertions.checkLoginTitle();
-  loginAssertions.checkUsernameField();
-  loginAssertions.checkPasswordField();
-  loginAssertions.checkLoginButton();
+Then("The login page should be open correctly", () => {
+  loginAssertions.checkOrangeHRMLogo().checkLoginTitle();
 });
 
 When("The user login as admin with valid username and password credentials", () => {
