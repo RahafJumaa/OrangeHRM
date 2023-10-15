@@ -36,5 +36,9 @@ class assertions{
         cy.get("span").contains("Should have at least 7 characters").should('be.visible');
     }
 
+    NavigateToAddEmployeePage(){
+        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/addEmployee");
+    }
+
 }
 export default assertions
