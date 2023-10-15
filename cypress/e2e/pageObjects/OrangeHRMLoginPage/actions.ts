@@ -16,7 +16,6 @@ openLoginPage (){
 
  clickOnLoginButton (){
     cy.get("[type=submit]").click();
-    cy.wait(5000);
 }
 
  clickOnForgotPasswordLink (){
