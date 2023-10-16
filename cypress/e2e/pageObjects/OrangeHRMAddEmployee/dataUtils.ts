@@ -1,4 +1,4 @@
-import {EmployeeAPIBody,UserAPIBody} from "../../../support/types";
+import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody,DeleteAPIResponse,UpdateAPIBody} from "../../../support/types";
 class api{
    public empNumber: string;
     NavigateToAddEmployeePage(){
@@ -45,6 +45,29 @@ class api{
             expect(response.body.data.employeeId).to.equal(employeeId);
           });
     }
+
+    DeleteEmployee(deleteEmployee: DeleteAPIBody,DeleteAPIResponse: DeleteAPIResponse){
+      cy.request({
+          method: 'DELETE',
+          url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees',
+          body:
+            deleteEmployee,
+        }).then((response) => {
+         expect(response.status).to.equal(200);
+         expect(response.body).to.equal(DeleteAPIResponse);
+      });   
+  }
+
+  UpdateEmployee(UpdateAPIBody: UpdateAPIBody){
+    cy.request({
+        method: 'PUT',
+        url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees/167/personal-details',
+        body:
+        UpdateAPIBody
+      }).then((response) => {
+       expect(response.status).to.equal(200);
+    });   
+}
 
 }
 export default api;

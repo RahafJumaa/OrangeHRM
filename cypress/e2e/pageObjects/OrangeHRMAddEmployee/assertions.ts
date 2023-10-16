@@ -36,9 +36,9 @@ class assertions{
         cy.get("span").contains("Should have at least 7 characters").should('be.visible');
     }
 
-    NavigateToAddEmployeePage(){
-        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/addEmployee");
+    checkTheEmployeeRecordNotAppear(id:string){
+        cy.wait(7000);
+        cy.get('.oxd-table-cell').contains(id).should('not.exist');
     }
-
 }
 export default assertions

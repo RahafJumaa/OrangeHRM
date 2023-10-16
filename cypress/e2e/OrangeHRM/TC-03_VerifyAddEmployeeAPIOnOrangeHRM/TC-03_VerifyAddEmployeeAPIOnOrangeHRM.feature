@@ -1,4 +1,4 @@
-Feature: TC-03_VerifyAddEmployeeOnOrangeHRM
+Feature: TC-03 Verify Add Employee On OrangeHRM
 
    Scenario: 1#: Verify Add Employee without create login details
       Given Common Step: The user login to OrangeHRM
@@ -11,4 +11,6 @@ Feature: TC-03_VerifyAddEmployeeOnOrangeHRM
       And the user navigate to Add employee page
       When the user add a new employee with create login details
       Then the emolyee should be added successfully
+
+
       

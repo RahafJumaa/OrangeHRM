@@ -49,5 +49,12 @@ class actions{
         cy.get('[type=password]').eq(2).clear().type(confirmPassword);
     }
 
+    NavigateToAddEmployeePage(){
+        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/addEmployee");
+    }
+
+    NavigateToEmployeeListPage(){
+        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList");
+    }
 }
 export default actions
