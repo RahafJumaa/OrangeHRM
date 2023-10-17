@@ -7,6 +7,3 @@ Feature: TC-04 Verify Delete Employee On OrangeHRM
       When the user delete the added employee
       And the user navigate to Employee List page
       Then the employee should be deleted successfully
-
-   
-      

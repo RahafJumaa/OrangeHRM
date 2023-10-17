@@ -14,11 +14,11 @@ export interface UserAPIBody {
 }
 
 export interface DeleteAPIBody {
-    ids : string[]
+    "ids" : string
 }
 
 export interface DeleteAPIResponse {
-    data : string[]
+    "data" : string
 }
 
 export interface UpdateAPIBody {
