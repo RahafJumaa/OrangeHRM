@@ -12,6 +12,4 @@ Given ("Common Step: The user login to OrangeHRM", () =>{
  Given ("Common Step: The user navigate to Add employee page", () =>{
     cy.wait(6000);
     loginActions.navigateToAddEmployeePage();
-    //apiAddEmployee.clickOnPIMOnSideMenue();
-    //apiAddEmployee.clickOnAddButton();
  });

@@ -1,4 +1,4 @@
-Feature: TC-02_VerifyAddEmployeeOnOrangeHRM
+Feature: TC-02 Verify Add Employee On OrangeHRM
 
    Scenario: 1#: Verify the Add Employee page open correctly
       Given Common Step: The user login to OrangeHRM
