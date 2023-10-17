@@ -56,5 +56,9 @@ class actions{
     NavigateToEmployeeListPage(){
         cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList");
     }
+
+    NavigateToPersonalDetailsPage(empNumber : string){
+        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewPersonalDetails/empNumber/"+empNumber+"");
+    }
 }
 export default actions
