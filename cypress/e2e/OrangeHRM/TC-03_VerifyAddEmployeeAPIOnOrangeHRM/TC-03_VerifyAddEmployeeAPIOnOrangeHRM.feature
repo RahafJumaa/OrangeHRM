@@ -10,6 +10,7 @@ Feature: TC-03 Verify Add Employee On OrangeHRM
       Given Common Step: The user login to OrangeHRM
       And the user navigate to Add employee page
       When the user add a new employee with create login details
+      And the user navigate to Employee List page
       Then the emolyee should be added successfully
 
 

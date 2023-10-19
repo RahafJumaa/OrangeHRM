@@ -2,7 +2,7 @@ import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
 import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
 import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
-import {EmployeeAPIBody,DeleteAPIBody, DeleteAPIResponse} from "../../../support/types";
+import {EmployeeAPIBody,DeleteAPIBody} from "../../../support/types";
 
 const deleteEmployeeActions : actions = new actions();
 const deleteEmployeeAssertions : assertions = new assertions();
@@ -22,7 +22,7 @@ createEmployee = {
   employeeId : employeeId,
 };
 let deleteEmployee : DeleteAPIBody;
-let deleteEmployeeResponse : DeleteAPIResponse;
+
 
 Given("the user navigate to Add Employee page", () => {
     deleteEmployeeActions.NavigateToAddEmployeePage();
@@ -39,10 +39,8 @@ When("the user delete the added employee", () => {
     deleteEmployeeAPI.DeleteEmployee(
         deleteEmployee = {
             "ids" : [empNumber]
-        },
-        deleteEmployeeResponse = {
-            "data" : [empNumber]
-        });
+        }
+    )
 });
 
 When("the user navigate to Employee List page", () => {
@@ -50,5 +48,5 @@ When("the user navigate to Employee List page", () => {
 });
 
 Then("the employee should be deleted successfully", () => {
-    deleteEmployeeAssertions.checkTheEmployeeRecordNotAppear(employeeId);
+    deleteEmployeeAssertions.checkTheEmployeeRecord([employeeId,"Rahaf","Jumaa"],false);
 });

@@ -1,9 +1,11 @@
 import { Given,When,Then } from "@badeball/cypress-cucumber-preprocessor";
 import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
 import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
+import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
 import {EmployeeAPIBody,UserAPIBody} from "../../../support/types";
 
 const addEmployeeActions : actions = new actions();
+const addEmployeeAssertions : assertions = new assertions();
 const addEmployeeAPI = new api();
 const range = {min: 1000, max: 9999};
 const delta = range.max - range.min;
@@ -20,12 +22,14 @@ createEmployee = {
 let createUser : UserAPIBody;
 
 Given("the user navigate to Add employee page", () => {
-  addEmployeeAPI.NavigateToAddEmployeePage();
   addEmployeeActions.NavigateToAddEmployeePage();
   });
 
 When("the user add a new employee without create login details", () => {
-    addEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee);
+    addEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
+    {
+      empNumber = response.data.empNumber;
+    });
   });
 
 When("the user add a new employee with create login details", () => {
@@ -41,9 +45,12 @@ When("the user add a new employee with create login details", () => {
     empNumber: empNumber,
   });
 })
-    
-  });
+});
+
+When("the user navigate to Employee List page", () => {
+    addEmployeeActions.NavigateToEmployeeListPage();
+});
 
 Then("the emolyee should be added successfully", () => {
-    addEmployeeAPI.checkPersonalDerails(employeeId,empNumber);
-  });
+    addEmployeeAssertions.checkTheEmployeeRecord([employeeId,"Rahaf","Jumaa"],true);
+});

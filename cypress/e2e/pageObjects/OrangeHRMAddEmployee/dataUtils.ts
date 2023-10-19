@@ -1,17 +1,6 @@
-import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody,UpdateAPIBody} from "../../../support/types";
+import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody,UpdateAPIBody, UpdateAPIResponse} from "../../../support/types";
 class api{
    public empNumber: string;
-    NavigateToAddEmployeePage(){
-        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/employees/action-summary").as("action-summary");
-        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/shortcuts").as("shortcuts");
-        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/employees/subunit").as("subunit");
-        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/employees/locations").as("locations");
-        
-        cy.wait("@action-summary");
-        cy.wait("@shortcuts");
-        cy.wait("@subunit");
-        cy.wait("@locations");
-    }
 
     AddEmployeeWithoutCreateLoginDetails(EmployeeAPIBody: EmployeeAPIBody){
        return cy.request({
@@ -57,25 +46,24 @@ class api{
       });   
   }
 
-UpdateEmployee(UpdateAPIBody: UpdateAPIBody){
+UpdateEmployee(UpdateAPIBody: UpdateAPIBody,empNumber: string){
     cy.request({
         method: 'PUT',
-        url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees/167/personal-details',
+        url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees/'+empNumber+'/personal-details',
         body:
         UpdateAPIBody
       }).then((response) => {
        expect(response.status).to.equal(200);
-       expect(response.body.data).to.equal(UpdateAPIBody);
     });   
 }
 
-checkUpdatedPersonalDerails(UpdateAPIBody: UpdateAPIBody, empNumber: string){
+checkUpdatedPersonalDerails(UpdateAPIResponse: UpdateAPIResponse, empNumber: string){
   cy.request({
       method: 'GET',
       url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees/'+empNumber+'/personal-details',
     }).then((response) => {
       expect(response.status).to.equal(200);
-      expect(response.body.data).to.equal(UpdateAPIBody);
+      expect(response.body.data).to.equal(UpdateAPIResponse);
     });
 }
 

@@ -50,6 +50,15 @@ class actions{
     }
 
     NavigateToAddEmployeePage(){
+        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/employees/action-summary").as("action-summary");
+        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/shortcuts").as("shortcuts");
+        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/employees/subunit").as("subunit");
+        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/employees/locations").as("locations");
+        
+        cy.wait("@action-summary");
+        cy.wait("@shortcuts");
+        cy.wait("@subunit");
+        cy.wait("@locations");
         cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/addEmployee");
     }
 

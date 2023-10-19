@@ -14,14 +14,11 @@ export interface UserAPIBody {
 }
 
 export interface DeleteAPIBody {
-    "ids" : string
-}
-
-export interface DeleteAPIResponse {
-    "data" : string
+    "ids" : string[]
 }
 
 export interface UpdateAPIBody {
+    empNumber: string,
     lastName: string,
     firstName: string,
     middleName: string,
@@ -29,13 +26,37 @@ export interface UpdateAPIBody {
     otherId: string,
     drivingLicenseNo: string,
     drivingLicenseExpiredDate: string,
-    gender: string,
+    gender: number,
     birthday: string,
     nationalityId: number,
     ssnNumber: string,
     sinNumber: string,
     nickname: string,
     smoker: boolean,
-    militaryService: string   
+    militaryService: string,
+}
+
+export interface UpdateAPIResponse {
+        empNumber: string,
+        lastName: string,
+        firstName: string,
+        middleName: string,
+        employeeId: string,
+        otherId: string,
+        drivingLicenseNo: string,
+        drivingLicenseExpiredDate: string,
+        gender: number,
+        maritalStatus: string,
+        birthday: string,
+        terminationId: string,
+            nationality: {
+                id: number,
+                name: string
+            },
+        ssnNumber: string,
+        sinNumber: string,
+        nickname: string,
+        smoker: boolean,
+        militaryService: string
 }
 
