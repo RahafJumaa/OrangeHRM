@@ -2,7 +2,7 @@ import { Given,When,Then } from "@badeball/cypress-cucumber-preprocessor";
 import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
 import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
 import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
-import {EmployeeAPIBody,UserAPIBody} from "../../../support/types";
+import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
 
 const addEmployeeActions : actions = new actions();
 const addEmployeeAssertions : assertions = new assertions();
@@ -20,7 +20,7 @@ createEmployee = {
   employeeId : employeeId,
 };
 let createUser : UserAPIBody;
-
+let deleteEmployee : DeleteAPIBody;
 Given("the user navigate to Add employee page", () => {
   addEmployeeActions.NavigateToAddEmployeePage();
   });
@@ -53,4 +53,19 @@ When("the user navigate to Employee List page", () => {
 
 Then("the emolyee should be added successfully", () => {
     addEmployeeAssertions.checkTheEmployeeRecord([employeeId,"Rahaf","Jumaa"],true);
+});
+
+after(() => {
+  addEmployeeAPI.searchOnEmployeeByID(employeeId).then((response)=>
+  {
+      if(response.data[0].employeeId === employeeId){
+    addEmployeeAPI.DeleteEmployee(
+      deleteEmployee = {
+      "ids" : [empNumber]
+  });
+  }
+     else {
+      return;
+     }  
+  });
 });

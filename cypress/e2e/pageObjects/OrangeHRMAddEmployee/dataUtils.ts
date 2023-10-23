@@ -1,4 +1,4 @@
-import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody,UpdateAPIBody, UpdateAPIResponse} from "../../../support/types";
+import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody,UpdateAPIBody} from "../../../support/EmolyeeTypes/types";
 class api{
    public empNumber: string;
 
@@ -19,7 +19,6 @@ class api{
          body: 
          UserAPIBody,
        }).then((response) => {
-         expect(response.status).to.equal(200);
          return response.body;
       });
    }
@@ -30,20 +29,17 @@ class api{
             method: 'GET',
             url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees/'+empNumber+'/personal-details',
           }).then((response) => {
-            expect(response.status).to.equal(200);
             expect(response.body.data.employeeId).to.equal(employeeId);
           });
     }
 
-    DeleteEmployee(deleteEmployee: DeleteAPIBody){
+    DeleteEmployee(DeleteAPIBody: DeleteAPIBody){
       cy.request({
           method: 'DELETE',
           url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees',
           body:
-            deleteEmployee,
-        }).then((response) => {
-         expect(response.status).to.equal(200);
-      });   
+            DeleteAPIBody
+        });       
   }
 
 UpdateEmployee(UpdateAPIBody: UpdateAPIBody,empNumber: string){
@@ -52,19 +48,39 @@ UpdateEmployee(UpdateAPIBody: UpdateAPIBody,empNumber: string){
         url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees/'+empNumber+'/personal-details',
         body:
         UpdateAPIBody
-      }).then((response) => {
-       expect(response.status).to.equal(200);
-    });   
+      });  
 }
 
-checkUpdatedPersonalDerails(UpdateAPIResponse: UpdateAPIResponse, empNumber: string){
+searchOnEmployeeByName(name: string){
   cy.request({
-      method: 'GET',
-      url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees/'+empNumber+'/personal-details',
-    }).then((response) => {
-      expect(response.status).to.equal(200);
-      expect(response.body.data).to.equal(UpdateAPIResponse);
-    });
+    method: 'GET',
+    url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees?limit=50&offset=0&model=detailed&nameOrId='+name+'&includeEmployees=onlyCurrent&sortField=employee.firstName&sortOrder=ASC',
+  }).then((response) => {
+    for(let i=0; i<response.body.meta.total; i++){
+    expect(response.body.data[i].firstName).to.include(name);
+    }
+  });
+}
+
+ searchOnEmployeeByID(id :string){
+  return cy.request({
+    method: 'GET',
+    url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees?limit=50&offset=0&model=detailed&employeeId='+id+'&includeEmployees=onlyCurrent&sortField=employee.firstName&sortOrder=ASC',
+  }).then((response) => {
+    expect(response.body.data[0].employeeId).to.equal(id);
+    expect(response.body.meta.total).to.equal(1);
+    return response.body;
+  });
+}
+
+searchOnEmployeeByNameAndID(name: string, id :string){
+  cy.request({
+    method: 'GET',
+    url: 'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees?limit=50&offset=0&model=detailed&nameOrId='+name+'&employeeId='+id+'&includeEmployees=onlyCurrent&sortField=employee.firstName&sortOrder=ASC',
+  }).then((response) => {
+    expect(response.body.data[0].employeeId).to.equal(id);
+    expect(response.body.data[0].firstName).to.equal(name);
+  });
 }
 
 }

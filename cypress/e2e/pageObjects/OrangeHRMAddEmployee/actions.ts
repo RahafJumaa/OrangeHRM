@@ -62,7 +62,7 @@ class actions{
         cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/addEmployee");
     }
 
-    NavigateToEmployeeListPage(){
+    NavigateToEmployeeListPage(){ 
         cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList");
     }
 

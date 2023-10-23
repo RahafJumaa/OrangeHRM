@@ -36,9 +36,7 @@ class assertions{
         cy.get("span").contains("Should have at least 7 characters").should('be.visible');
     }
 
-    checkTheEmployeeRecord(employeeRow: [id : string , firstName : string , lastName : string], isExist: boolean){
-        cy.wait(7000);
-        
+    checkTheEmployeeRecord(employeeRow: [id : string , firstName : string , lastName : string], isExist: boolean){   
         employeeRow.forEach((value) => {
             if(isExist){
             cy.get('.oxd-table-row').get('.oxd-table-cell').contains(value).should('exist'); 

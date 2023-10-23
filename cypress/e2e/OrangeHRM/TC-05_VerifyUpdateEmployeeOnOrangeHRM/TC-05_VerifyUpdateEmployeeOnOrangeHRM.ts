@@ -2,7 +2,7 @@ import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
 import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
 import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
-import {EmployeeAPIBody,UpdateAPIBody, UpdateAPIResponse} from "../../../support/types";
+import {EmployeeAPIBody,UpdateAPIBody,DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
 
 const updateEmployeeActions : actions = new actions();
 const updateEmployeeAssertions : assertions = new assertions();
@@ -20,8 +20,7 @@ createEmployee = {
   lastName : "Jumaa",
   employeeId : employeeId,
 };
-let updateEmployee : UpdateAPIBody;
-let updateEmployeeResponse : UpdateAPIResponse;
+let deleteEmployee : DeleteAPIBody;
 Given("the user navigate to Add Employee page", () => {
     updateEmployeeActions.NavigateToAddEmployeePage();
 });
@@ -34,8 +33,7 @@ Given("the user add a new employee", () => {
 });
   
 When("the user updatde the added employee", () => {
-    updateEmployeeAPI.UpdateEmployee(
-        updateEmployee = {
+    let updateEmployee : UpdateAPIBody = {
             "empNumber": empNumber,
             "lastName": "Hamoda",
             "firstName": "Dana",
@@ -52,7 +50,9 @@ When("the user updatde the added employee", () => {
             "nickname": "",
             "smoker": true,
             "militaryService": ""
-        },
+        };
+    updateEmployeeAPI.UpdateEmployee(
+        updateEmployee,
         empNumber
         );
 });
@@ -64,3 +64,18 @@ When("the user navigate to Employee List page", () => {
 Then("the employee should be updated successfully", () => {
     updateEmployeeAssertions.checkTheEmployeeRecord([employeeId,"Dana","Hamoda"],true);
 });
+
+after(() => {
+    updateEmployeeAPI.searchOnEmployeeByID(employeeId).then((response)=>
+    {
+        if(response.data[0].employeeId === employeeId){
+      updateEmployeeAPI.DeleteEmployee(
+        deleteEmployee = {
+        "ids" : [empNumber]
+    });
+    }
+       else {
+        return;
+       }  
+    });
+ });

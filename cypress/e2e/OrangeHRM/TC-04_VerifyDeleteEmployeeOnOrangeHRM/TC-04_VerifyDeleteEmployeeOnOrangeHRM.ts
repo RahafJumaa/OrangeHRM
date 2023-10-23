@@ -2,11 +2,10 @@ import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
 import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
 import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
-import {EmployeeAPIBody,DeleteAPIBody} from "../../../support/types";
+import {EmployeeAPIBody,DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
 
 const deleteEmployeeActions : actions = new actions();
 const deleteEmployeeAssertions : assertions = new assertions();
-const addEmployeeAPI = new api();
 const deleteEmployeeAPI = new api();
 const range = {min: 1000, max: 9999};
 const delta = range.max - range.min;
@@ -29,18 +28,25 @@ Given("the user navigate to Add Employee page", () => {
 });
 
 Given("the user add a new employee", () => {
-    addEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
+    deleteEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
     {
       empNumber = response.data.empNumber;
 });
 });
   
 When("the user delete the added employee", () => {
-    deleteEmployeeAPI.DeleteEmployee(
+    deleteEmployeeAPI.searchOnEmployeeByID(employeeId).then((response)=>
+    {
+        if(response.data[0].employeeId === employeeId){
+      deleteEmployeeAPI.DeleteEmployee(
         deleteEmployee = {
-            "ids" : [empNumber]
-        }
-    )
+        "ids" : [empNumber]
+    });
+    }
+       else {
+        return;
+       }  
+    });
 });
 
 When("the user navigate to Employee List page", () => {
