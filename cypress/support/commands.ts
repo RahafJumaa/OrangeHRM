@@ -13,7 +13,7 @@ declare global {
   }
 }
 Cypress.Commands.add("login" , (username: string, password: string) => {
-     cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+     cy.visit("/auth/login");
      loginActions.typeInUsernameField(username).typeInPasswordField(password).clickOnLoginButton();
     
    });

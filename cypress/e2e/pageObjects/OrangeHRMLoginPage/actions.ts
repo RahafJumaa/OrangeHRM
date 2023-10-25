@@ -1,7 +1,6 @@
 class actions{
-   
 openLoginPage (){
-    cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+    cy.visit("/auth/login");
 }
 
  typeInUsernameField (username : string){
