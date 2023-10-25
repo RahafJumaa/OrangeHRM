@@ -1,12 +1,12 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
 import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
-import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
+import dataUtils from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
 import {EmployeeAPIBody,UpdateAPIBody,DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
 
 const updateEmployeeActions : actions = new actions();
 const updateEmployeeAssertions : assertions = new assertions();
-const updateEmployeeAPI = new api();
+const EmployeeAPI = new dataUtils();
 const range = {min: 1000, max: 9999};
 const delta = range.max - range.min;
 const employeeId = (Math.round(range.min + Math.random() * delta)).toString();
@@ -26,7 +26,7 @@ Given("the user navigate to Add Employee page", () => {
 });
 
 Given("the user add a new employee", () => {
-    updateEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
+    EmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
     {
       empNumber = response.data.empNumber;
 });
@@ -51,7 +51,7 @@ When("the user updatde the added employee", () => {
             "smoker": true,
             "militaryService": ""
         };
-    updateEmployeeAPI.UpdateEmployee(
+        EmployeeAPI.UpdateEmployee(
         updateEmployee,
         empNumber
         );
@@ -66,16 +66,5 @@ Then("the employee should be updated successfully", () => {
 });
 
 after(() => {
-    updateEmployeeAPI.searchOnEmployeeByID(employeeId).then((response)=>
-    {
-        if(response.data[0].employeeId === employeeId){
-      updateEmployeeAPI.DeleteEmployee(
-        deleteEmployee = {
-        "ids" : [empNumber]
-    });
-    }
-       else {
-        return;
-       }  
-    });
+    EmployeeAPI.DeleteEmployee(employeeId,deleteEmployee ={"ids" : [empNumber]});
  });

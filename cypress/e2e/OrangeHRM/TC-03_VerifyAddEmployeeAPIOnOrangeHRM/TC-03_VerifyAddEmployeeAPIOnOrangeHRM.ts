@@ -1,12 +1,12 @@
 import { Given,When,Then } from "@badeball/cypress-cucumber-preprocessor";
-import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
+import dataUtils from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
 import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
 import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
 import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
 
 const addEmployeeActions : actions = new actions();
 const addEmployeeAssertions : assertions = new assertions();
-const addEmployeeAPI = new api();
+const EmployeeAPI = new dataUtils();
 const range = {min: 1000, max: 9999};
 const delta = range.max - range.min;
 const employeeId = (Math.round(range.min + Math.random() * delta)).toString();
@@ -26,17 +26,17 @@ Given("the user navigate to Add employee page", () => {
   });
 
 When("the user add a new employee without create login details", () => {
-    addEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
+  EmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
     {
       empNumber = response.data.empNumber;
     });
   });
 
 When("the user add a new employee with create login details", () => {
-  addEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
+  EmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
   {
     empNumber = response.data.empNumber;
-    addEmployeeAPI.AddEmployeeWithCreateLoginDetails(
+    EmployeeAPI.AddEmployeeWithCreateLoginDetails(
     createUser = {
     username : username,
     password : "rahaf123",
@@ -56,16 +56,5 @@ Then("the emolyee should be added successfully", () => {
 });
 
 after(() => {
-  addEmployeeAPI.searchOnEmployeeByID(employeeId).then((response)=>
-  {
-      if(response.data[0].employeeId === employeeId){
-    addEmployeeAPI.DeleteEmployee(
-      deleteEmployee = {
-      "ids" : [empNumber]
-  });
-  }
-     else {
-      return;
-     }  
-  });
+  EmployeeAPI.DeleteEmployee(employeeId,deleteEmployee ={"ids" : [empNumber]});
 });

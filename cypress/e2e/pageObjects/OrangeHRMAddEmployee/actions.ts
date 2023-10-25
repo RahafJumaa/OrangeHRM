@@ -50,24 +50,24 @@ class actions{
     }
 
     NavigateToAddEmployeePage(){
-        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/employees/action-summary").as("action-summary");
-        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/shortcuts").as("shortcuts");
-        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/employees/subunit").as("subunit");
-        cy.intercept("GET", "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/dashboard/employees/locations").as("locations");
+        cy.intercept("GET", "/api/v2/dashboard/employees/action-summary").as("action-summary");
+        cy.intercept("GET", "/api/v2/dashboard/shortcuts").as("shortcuts");
+        cy.intercept("GET", "/api/v2/dashboard/employees/subunit").as("subunit");
+        cy.intercept("GET", "/api/v2/dashboard/employees/locations").as("locations");
         
-        cy.wait("@action-summary");
+       /* cy.wait("@action-summary");
         cy.wait("@shortcuts");
         cy.wait("@subunit");
-        cy.wait("@locations");
-        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/addEmployee");
+        cy.wait("@locations");*/
+        cy.visit("/pim/addEmployee");
     }
 
     NavigateToEmployeeListPage(){ 
-        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList");
+        cy.visit("/pim/viewEmployeeList");
     }
 
     NavigateToPersonalDetailsPage(empNumber : string){
-        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewPersonalDetails/empNumber/"+empNumber+"");
+        cy.visit("/pim/viewPersonalDetails/empNumber/"+empNumber+"");
     }
 }
 export default actions

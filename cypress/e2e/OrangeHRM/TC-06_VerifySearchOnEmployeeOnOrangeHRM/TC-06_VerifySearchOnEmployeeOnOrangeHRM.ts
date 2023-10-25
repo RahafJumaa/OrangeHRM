@@ -1,12 +1,12 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
 import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
-import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
+import dataUtils from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
 import {DeleteAPIBody, EmployeeAPIBody} from "../../../support/EmolyeeTypes/types";
 
 const searchEmployeeActions : actions = new actions();
 const searchEmployeeAssertions : assertions = new assertions();
-const searchEmployeeAPI = new api();
+const EmployeeAPI = new dataUtils();
 const range = {min: 1000, max: 9999};
 const delta = range.max - range.min;
 const employeeId = (Math.round(range.min + Math.random() * delta)).toString();
@@ -24,12 +24,9 @@ createEmployee = {
   employeeId : employeeId,
 };
 let deleteEmployee :DeleteAPIBody;
-Given("the user navigate to Add Employee page", () => {
-    searchEmployeeActions.NavigateToAddEmployeePage();
-});
 
 Given("the user add a new employee", () => {
-    searchEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
+    EmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
     {
       empNumber = response.data.empNumber;
 });
@@ -40,28 +37,17 @@ When("the user navigate to Employee List page", () => {
 });
   
 When("the user search on the added employee by name", () => {
-    searchEmployeeAPI.searchOnEmployeeByName(firstName);
+    EmployeeAPI.getEmployeeByName(firstName);
 });
 
 When("the user search on the added employee by id", () => {
-    searchEmployeeAPI.searchOnEmployeeByID(employeeId);
+    EmployeeAPI.getEmployeeByID(employeeId);
 });
 
 When("the user search on the added employee by name and id", () => {
-    searchEmployeeAPI.searchOnEmployeeByNameAndID(firstName,employeeId);
+    EmployeeAPI.getEmployeeByNameAndID(firstName,employeeId);
 });
 
 after(() => {
-    searchEmployeeAPI.searchOnEmployeeByID(employeeId).then((response)=>
-    {
-        if(response.data[0].employeeId === employeeId){
-      searchEmployeeAPI.DeleteEmployee(
-        deleteEmployee = {
-        "ids" : [empNumber]
-    });
-    }
-       else {
-        return;
-       }  
-    });
+    EmployeeAPI.DeleteEmployee(employeeId,deleteEmployee ={"ids" : [empNumber]});
  });
