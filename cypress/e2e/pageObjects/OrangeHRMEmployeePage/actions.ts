@@ -1,4 +1,4 @@
-class actions{
+class EmployeePageActions{
     navigateToAddEmployeePage(){
         cy.get("span").contains("PIM").click();
         cy.get("button").contains("Add").click();
@@ -55,10 +55,10 @@ class actions{
         cy.intercept("GET", "/api/v2/dashboard/employees/subunit").as("subunit");
         cy.intercept("GET", "/api/v2/dashboard/employees/locations").as("locations");
         
-       /* cy.wait("@action-summary");
+        cy.wait("@action-summary");
         cy.wait("@shortcuts");
         cy.wait("@subunit");
-        cy.wait("@locations");*/
+        cy.wait("@locations");
         cy.visit("/pim/addEmployee");
     }
 
@@ -70,4 +70,4 @@ class actions{
         cy.visit("/pim/viewPersonalDetails/empNumber/"+empNumber+"");
     }
 }
-export default actions
+export default EmployeePageActions

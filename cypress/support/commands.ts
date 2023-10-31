@@ -15,5 +15,9 @@ declare global {
 Cypress.Commands.add("login" , (username: string, password: string) => {
      cy.visit("/auth/login");
      loginActions.typeInUsernameField(username).typeInPasswordField(password).clickOnLoginButton();
-    
    });
+
+
+
+
+

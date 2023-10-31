@@ -1,6 +1,6 @@
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
-import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
-import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
+import actions from "../../pageObjects/OrangeHRMEmployeePage/actions";
+import api from "../../pageObjects/OrangeHRMEmployeePage/dataUtils";
 
 const loginActions = new actions();
 const apiAddEmployee = new api();

@@ -1,93 +1,80 @@
 import { Given,When,Then } from "@badeball/cypress-cucumber-preprocessor";
-import dataUtils from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
-import data_Utils from "../../pageObjects/OrangeHRMLeave/dataUtils";
-import actions from "../../pageObjects/OrangeHRMLeave/actions";
-import assertions from "../../pageObjects/OrangeHRMLeave/assertions";
-import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
-import {AddLeaveEntitlementBody,RequestLeaveBody,ApproveRequestLeaveBody} from "../../../support/LeaveTypes/types";
+import EmployeePageDataUtils from "../../pageObjects/OrangeHRMEmployeePage/dataUtils";
+import LeavePageDataUtils from "../../pageObjects/OrangeHRMLeavePage/dataUtils";
+import LoginPageActions from "../../pageObjects/OrangeHRMLoginPage/actions";
+import LeavePageActions from "../../pageObjects/OrangeHRMLeavePage/actions";
+import LeavePageAssertions from "../../pageObjects/OrangeHRMLeavePage/assertions";
+import {deleteAPIBody} from "../../../support/EmolyeeTypes/types";
+import {addLeaveEntitlementBody,requestLeaveBody,approveRequestLeaveBody} from "../../../support/LeaveTypes/types";
+import { getEmployee, getUser } from "cypress/e2e/Common/OrangeHRMEmployeePage/dataFaker";
+import moment from "moment-timezone";
 
-const leaveActions : actions = new actions();
-const leaveAssertions : assertions = new assertions();
-const EmployeeAPI = new dataUtils();
-const LeaveAPI = new data_Utils();
-const range = {min: 1000, max: 9999};
-const delta = range.max - range.min;
-const employeeId = (Math.round(range.min + Math.random() * delta)).toString();
-const username = (Math.random() + 1).toString(36).substring(2);
-const password = "rahaf123";
+const loginActions : LoginPageActions = new LoginPageActions();
+const leaveActions : LeavePageActions = new LeavePageActions();
+const leaveAssertions : LeavePageAssertions = new LeavePageAssertions();
+const employeeAPI = new EmployeePageDataUtils();
+const LeaveAPI = new LeavePageDataUtils();
 const leaveTypeId = 8;
-const fromDate = "2023-01-01";
-const toDate = "2023-12-31";
+const fromDateEntitlement = moment().startOf('year').format("YYYY-MM-DD");
+const toDateEntitlement = moment().endOf('year').format("YYYY-MM-DD");
+const fromDateLeave  = moment().add(2, 'days').format("YYYY-MM-DD");
+const toDateLeave  = moment().add(4, 'days').format("YYYY-MM-DD");
+const employee = getEmployee();
 
+let user = getUser();
 let  empNumber: string ;
 let id: number;
-let createEmployee : EmployeeAPIBody;
-createEmployee = {
-  firstName : "Rahaf",
-  middleName : "Suliman",
-  lastName : "Jumaa",
-  employeeId : employeeId,
+let deleteEmployee : deleteAPIBody;
+let addLeaveEntitlement: addLeaveEntitlementBody = {
+    "empNumber": empNumber,
+    "leaveTypeId": leaveTypeId,
+    "fromDate": fromDateEntitlement,
+    "toDate": toDateEntitlement,
+    "entitlement": "3"
 };
-let createUser : UserAPIBody;
-let deleteEmployee : DeleteAPIBody;
-let addLeaveEntitlement: AddLeaveEntitlementBody;
-let requestLeave :RequestLeaveBody;
-let approveRequestLeave :ApproveRequestLeaveBody = {
+let requestLeave :requestLeaveBody = {
+    "leaveTypeId": leaveTypeId,
+    "fromDate": fromDateLeave,
+    "toDate": toDateLeave,
+    "comment": "nothing",
+    "duration": {
+        "type": "half_day_morning"
+    },
+    "partialOption": "all"
+};
+let approveRequestLeave :approveRequestLeaveBody = {
     action : "APPROVE",
 };
 before(() => {
-    leaveActions.loginToOrangeHRM("Admin","admin123");
+    loginActions.loginToOrangeHRM("Admin","admin123");
   });
 
 Given("The system has an Employee with Login Details", () => {
-    EmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
+    employeeAPI.CreateEmployee(employee).then((response)=>
     {
       empNumber = response.data.empNumber;
-      EmployeeAPI.AddEmployeeWithCreateLoginDetails(
-      createUser = {
-      username : username,
-      password : password,
-      userRoleId : 2,
-      status : true,
-      empNumber: empNumber,
-    });
-  })
+      user = {...getUser(), empNumber: empNumber};
+      employeeAPI.CreateUser(user)
   });
+});
 
 Given("The employee has number of entitlement", () => {
-    addLeaveEntitlement = {
-        "empNumber": empNumber,
-        "leaveTypeId": leaveTypeId,
-        "fromDate": fromDate,
-        "toDate": toDate,
-        "entitlement": "3"
-    }
-    LeaveAPI.addLeaveEntitlement(addLeaveEntitlement);
+    LeaveAPI.addLeaveEntitlement({...addLeaveEntitlement, empNumber: empNumber});
 });
 
 When("The employee login to the system", () => {
-    leaveActions.logoutfromOrangeHRM().loginToOrangeHRM(username,password);
+    loginActions.logoutfromOrangeHRM().loginToOrangeHRM(user.username,user.password);
 });
 
 When("The employee requests a leave day in the future", () => {
-    requestLeave = {
-        "leaveTypeId": leaveTypeId,
-        "fromDate": "2023-10-25",
-        "toDate": "2023-10-27",
-        "comment": "nothing",
-        "duration": {
-            "type": "half_day_morning"
-        },
-        "partialOption": "all"
-    }
-    LeaveAPI.requestLeave(requestLeave).then((response)=>
+   LeaveAPI.requestLeave(requestLeave).then((response)=>
     {
       id = response.data.id;
 });;
 });
 
 When("The admin login to the system", () => {
-    leaveActions.logoutfromOrangeHRM().loginToOrangeHRM("Admin","admin123");
+    loginActions.logoutfromOrangeHRM().loginToOrangeHRM("Admin","admin123");
 });
 
 When("The admin approves the leave request", () => {
@@ -103,13 +90,6 @@ Then("The leave should exist in the records table with status Scheduled", () => 
 });
 
 after(() => {
-    EmployeeAPI.DeleteEmployee(employeeId,deleteEmployee ={"ids" : [empNumber]});
+    employeeAPI.deleteEmployee(employee.employeeId,deleteEmployee ={"ids" : [empNumber]});
  });
-
-
-
-
-
-
-
 

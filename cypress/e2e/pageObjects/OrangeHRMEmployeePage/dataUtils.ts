@@ -1,23 +1,23 @@
-import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody,UpdateAPIBody} from "../../../support/EmolyeeTypes/types";
-class dataUtils{
+import { createDeleteEmployeeBody, createEmployeeBody, createUpdateEmployeeBody, createUserBody } from "@support/EmolyeeTypes/constants";
+import {employeeAPIBody,userAPIBody,deleteAPIBody,updateAPIBody} from "../../../support/EmolyeeTypes/types";
+class EmployeePageDataUtils{
    public empNumber: string;
-
-    AddEmployeeWithoutCreateLoginDetails(EmployeeAPIBody: EmployeeAPIBody){
+    CreateEmployee(employeeAPIBody: employeeAPIBody){
        return cy.request({
             method: 'POST',
             url: '/api/v2/pim/employees',
             body: 
-            EmployeeAPIBody,
+            createEmployeeBody(employeeAPIBody),
           }).then((response) => response.body
           );
     }
 
-    AddEmployeeWithCreateLoginDetails(UserAPIBody: UserAPIBody){
+    CreateUser(userAPIBody: userAPIBody){
       return cy.request({
          method: 'POST',
          url: '/api/v2/admin/users',
          body: 
-         UserAPIBody,
+         createUserBody(userAPIBody),
        }).then((response) => {
          return response.body;
       });
@@ -26,18 +26,18 @@ class dataUtils{
     checkPersonalDerails(employeeId: string, empNumber: string){
         cy.request({
             method: 'GET',
-            url: '/api/v2/pim/employees/'+empNumber+'/personal-details',
+            url: `/api/v2/pim/employees/${empNumber}/personal-details`,
           }).then((response) => {
             expect(response.body.data.employeeId).to.equal(employeeId);
           });
     }
 
-UpdateEmployee(UpdateAPIBody: UpdateAPIBody,empNumber: string){
+updateEmployee(updateAPIBody: updateAPIBody,empNumber: string){
     cy.request({
         method: 'PUT',
-        url: '/api/v2/pim/employees/'+empNumber+'/personal-details',
+        url: `/api/v2/pim/employees/${empNumber}/personal-details`,
         body:
-        UpdateAPIBody
+        createUpdateEmployeeBody(updateAPIBody)
       }).then((response) => {
         return response.body;
       });  
@@ -46,7 +46,7 @@ UpdateEmployee(UpdateAPIBody: UpdateAPIBody,empNumber: string){
 getEmployeeByName(name: string){
   cy.request({
     method: 'GET',
-    url: '/api/v2/pim/employees?limit=50&offset=0&model=detailed&nameOrId='+name+'&includeEmployees=onlyCurrent&sortField=employee.firstName&sortOrder=ASC',
+    url: `/api/v2/pim/employees?limit=50&offset=0&model=detailed&nameOrId=${name}&includeEmployees=onlyCurrent&sortField=employee.firstName&sortOrder=ASC`,
   }).then((response) => {
     for(let i=0; i<response.body.meta.total; i++){
     expect(response.body.data[i].firstName).to.include(name);
@@ -57,7 +57,7 @@ getEmployeeByName(name: string){
 getEmployeeByID(id :string){
   return cy.request({
     method: 'GET',
-    url: '/api/v2/pim/employees?limit=50&offset=0&model=detailed&employeeId='+id+'&includeEmployees=onlyCurrent&sortField=employee.firstName&sortOrder=ASC',
+    url: `/api/v2/pim/employees?limit=50&offset=0&model=detailed&employeeId=${id}&includeEmployees=onlyCurrent&sortField=employee.firstName&sortOrder=ASC`,
   }).then((response) => {
     return response.body;
   });
@@ -66,27 +66,32 @@ getEmployeeByID(id :string){
 getEmployeeByNameAndID(name: string, id :string){
   cy.request({
     method: 'GET',
-    url: '/api/v2/pim/employees?limit=50&offset=0&model=detailed&nameOrId='+name+'&employeeId='+id+'&includeEmployees=onlyCurrent&sortField=employee.firstName&sortOrder=ASC',
+    url: `/api/v2/pim/employees?limit=50&offset=0&model=detailed&nameOrId=${name}&employeeId=${id}&includeEmployees=onlyCurrent&sortField=employee.firstName&sortOrder=ASC`,
   }).then((response) => {
     expect(response.body.data[0].employeeId).to.equal(id);
     expect(response.body.data[0].firstName).to.equal(name);
   });
 }
 
-DeleteEmployee(id :string, DeleteAPIBody: DeleteAPIBody){
+deleteEmployee(id :string, deleteAPIBody: deleteAPIBody){
   this.getEmployeeByID(id).then((response) => {
+     if (Array.isArray(response) && response.length === 0) {
+      return;
+      }
+      else {
     if(response.data[0].employeeId === id){
     cy.request({
       method: 'DELETE',
       url: '/api/v2/pim/employees',
       body:
-        DeleteAPIBody
+      createDeleteEmployeeBody(deleteAPIBody)
     }); 
   }
   else {
    return;
-  }  
+  } 
+} 
   });    
 }
 }
-export default dataUtils;
+export default EmployeePageDataUtils;

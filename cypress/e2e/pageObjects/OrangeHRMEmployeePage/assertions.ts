@@ -1,4 +1,4 @@
-class assertions{
+class EmployeePageAssertions{
     checkAddEmployeeTitle (){
         cy.get("h6").contains("Add Employee").should('be.visible');
     } 
@@ -47,4 +47,4 @@ class assertions{
         })
     }
 }
-export default assertions
+export default EmployeePageAssertions

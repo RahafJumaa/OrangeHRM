@@ -1,4 +1,4 @@
-export interface AddLeaveEntitlementBody {
+export interface addLeaveEntitlementBody {
     empNumber: string,
     leaveTypeId: number,
     fromDate: string,
@@ -6,7 +6,7 @@ export interface AddLeaveEntitlementBody {
     entitlement: string
 }
 
-export interface RequestLeaveBody {
+export interface requestLeaveBody {
     leaveTypeId: number,
     fromDate: string,
     toDate: string,
@@ -17,6 +17,6 @@ export interface RequestLeaveBody {
     partialOption: string
 }
 
-export interface ApproveRequestLeaveBody {
+export interface approveRequestLeaveBody {
     action: string;
 }

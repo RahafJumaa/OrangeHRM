@@ -1,4 +1,4 @@
-class actions{
+class LoginPageActions{
 openLoginPage (){
     cy.visit("/auth/login");
 }
@@ -20,7 +20,19 @@ openLoginPage (){
  clickOnForgotPasswordLink (){
     cy.get("p").contains("Forgot your password? ").click();
 }
+
+loginToOrangeHRM(username: string, password: string){
+    cy.login(username,password);
+    return this;
 }
-export default actions
+
+logoutfromOrangeHRM(){
+    cy.get('.oxd-userdropdown-img').click();
+    cy.get('.oxd-userdropdown-link').eq(3).click();
+    return this;
+}
+
+}
+export default LoginPageActions
 
 

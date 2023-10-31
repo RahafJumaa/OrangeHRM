@@ -1,9 +1,9 @@
 import {Given, Then, When , And} from "@badeball/cypress-cucumber-preprocessor";
-import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
-import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
+import EmployeePageActions from "../../pageObjects/OrangeHRMEmployeePage/actions";
+import EmployeePageAssertions from "../../pageObjects/OrangeHRMEmployeePage/assertions";
 
-const addEmployeeActions = new actions();
-const addEmployeeAssertions : assertions = new assertions();
+const addEmployeeActions = new EmployeePageActions();
+const addEmployeeAssertions  = new EmployeePageAssertions();
 
   Then("The Add Employee page should be open correctly", () => {
     addEmployeeAssertions.checkAddEmployeeTitle();
