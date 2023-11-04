@@ -4,7 +4,7 @@ import LeavePageDataUtils from "../../pageObjects/OrangeHRMLeavePage/dataUtils";
 import LoginPageActions from "../../pageObjects/OrangeHRMLoginPage/actions";
 import LeavePageActions from "../../pageObjects/OrangeHRMLeavePage/actions";
 import LeavePageAssertions from "../../pageObjects/OrangeHRMLeavePage/assertions";
-import {deleteAPIBody} from "../../../support/EmolyeeTypes/types";
+import {DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
 import {addLeaveEntitlementBody,requestLeaveBody,approveRequestLeaveBody} from "../../../support/LeaveTypes/types";
 import { getEmployee, getUser } from "cypress/e2e/Common/OrangeHRMEmployeePage/dataFaker";
 import moment from "moment-timezone";
@@ -24,7 +24,7 @@ const employee = getEmployee();
 let user = getUser();
 let  empNumber: string ;
 let id: number;
-let deleteEmployee : deleteAPIBody;
+let deleteEmployee : DeleteAPIBody;
 let addLeaveEntitlement: addLeaveEntitlementBody = {
     "empNumber": empNumber,
     "leaveTypeId": leaveTypeId,
@@ -50,11 +50,11 @@ before(() => {
   });
 
 Given("The system has an Employee with Login Details", () => {
-    employeeAPI.CreateEmployee(employee).then((response)=>
+    employeeAPI.createEmployee(employee).then((response)=>
     {
       empNumber = response.data.empNumber;
       user = {...getUser(), empNumber: empNumber};
-      employeeAPI.CreateUser(user)
+      employeeAPI.createUser(user)
   });
 });
 
@@ -86,10 +86,11 @@ When("Open the My Leave page", () => {
 });
 
 Then("The leave should exist in the records table with status Scheduled", () => {
-    leaveAssertions.checkScheduledStatus();
+    leaveAssertions.waitSkeletonDisappeared().checkScheduledStatus();
 });
 
 after(() => {
-    employeeAPI.deleteEmployee(employee.employeeId,deleteEmployee ={"ids" : [empNumber]});
- });
+    loginActions.logoutfromOrangeHRM().loginToOrangeHRM("Admin","admin123");
+    employeeAPI.deleteEmployee(employee.employeeId);
+});
 

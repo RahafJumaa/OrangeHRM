@@ -50,15 +50,6 @@ class EmployeePageActions{
     }
 
     NavigateToAddEmployeePage(){
-        cy.intercept("GET", "/api/v2/dashboard/employees/action-summary").as("action-summary");
-        cy.intercept("GET", "/api/v2/dashboard/shortcuts").as("shortcuts");
-        cy.intercept("GET", "/api/v2/dashboard/employees/subunit").as("subunit");
-        cy.intercept("GET", "/api/v2/dashboard/employees/locations").as("locations");
-        
-        cy.wait("@action-summary");
-        cy.wait("@shortcuts");
-        cy.wait("@subunit");
-        cy.wait("@locations");
         cy.visit("/pim/addEmployee");
     }
 

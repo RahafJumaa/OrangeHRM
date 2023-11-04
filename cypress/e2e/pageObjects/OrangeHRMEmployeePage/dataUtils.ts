@@ -1,8 +1,8 @@
 import { createDeleteEmployeeBody, createEmployeeBody, createUpdateEmployeeBody, createUserBody } from "@support/EmolyeeTypes/constants";
-import {employeeAPIBody,userAPIBody,deleteAPIBody,updateAPIBody} from "../../../support/EmolyeeTypes/types";
+import {EmployeeAPIBody,UserAPIBody,DeleteAPIBody,UpdateAPIBody} from "../../../support/EmolyeeTypes/types";
 class EmployeePageDataUtils{
    public empNumber: string;
-    CreateEmployee(employeeAPIBody: employeeAPIBody){
+    createEmployee(employeeAPIBody: EmployeeAPIBody){
        return cy.request({
             method: 'POST',
             url: '/api/v2/pim/employees',
@@ -12,7 +12,7 @@ class EmployeePageDataUtils{
           );
     }
 
-    CreateUser(userAPIBody: userAPIBody){
+    createUser(userAPIBody: UserAPIBody){
       return cy.request({
          method: 'POST',
          url: '/api/v2/admin/users',
@@ -22,7 +22,7 @@ class EmployeePageDataUtils{
          return response.body;
       });
    }
-
+   
     checkPersonalDerails(employeeId: string, empNumber: string){
         cy.request({
             method: 'GET',
@@ -32,7 +32,7 @@ class EmployeePageDataUtils{
           });
     }
 
-updateEmployee(updateAPIBody: updateAPIBody,empNumber: string){
+updateEmployee(updateAPIBody: UpdateAPIBody,empNumber: string){
     cy.request({
         method: 'PUT',
         url: `/api/v2/pim/employees/${empNumber}/personal-details`,
@@ -73,24 +73,19 @@ getEmployeeByNameAndID(name: string, id :string){
   });
 }
 
-deleteEmployee(id :string, deleteAPIBody: deleteAPIBody){
+deleteEmployee(id :string){
   this.getEmployeeByID(id).then((response) => {
      if (Array.isArray(response) && response.length === 0) {
       return;
       }
       else {
-    if(response.data[0].employeeId === id){
     cy.request({
       method: 'DELETE',
       url: '/api/v2/pim/employees',
       body:
-      createDeleteEmployeeBody(deleteAPIBody)
+      {ids: [response.data[0].empNumber]}
     }); 
   }
-  else {
-   return;
-  } 
-} 
   });    
 }
 }

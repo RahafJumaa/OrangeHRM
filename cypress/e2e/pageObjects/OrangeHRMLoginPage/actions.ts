@@ -23,13 +23,26 @@ openLoginPage (){
 
 loginToOrangeHRM(username: string, password: string){
     cy.login(username,password);
+    cy.intercept("GET", "/api/v2/dashboard/employees/action-summary").as("action-summary");
+    cy.intercept("GET", "/api/v2/dashboard/shortcuts").as("shortcuts");
+    cy.intercept("GET", "/api/v2/dashboard/employees/subunit").as("subunit");
+    cy.intercept("GET", "/api/v2/dashboard/employees/locations").as("locations");
+    /*cy.wait("@action-summary");
+    cy.wait("@shortcuts");
+    cy.wait("@subunit");
+    cy.wait("@locations");*/
     return this;
 }
 
 logoutfromOrangeHRM(){
-    cy.get('.oxd-userdropdown-img').click();
-    cy.get('.oxd-userdropdown-link').eq(3).click();
+    cy.intercept("https://opensource-demo.orangehrmlive.com/web/index.php/core/i18n/messages**").as("messages");
+    cy.get(".oxd-userdropdown-tab").click();
+    cy.contains("[role=menuitem]", "Logout").click();
+    cy.wait("@messages");
     return this;
+}
+waitSkeletonDisappeared() {
+    return cy.get(".oxd-loading-spinner-container", { timeout: 10000 }).should("not.exist");
 }
 
 }

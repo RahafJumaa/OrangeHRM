@@ -1,11 +1,11 @@
-import {employeeAPIBody,userAPIBody} from "../../../support/EmolyeeTypes/types";
+import {EmployeeAPIBody,UserAPIBody} from "../../../support/EmolyeeTypes/types";
 import { getPrefix } from "@support/data";
 
 const range = {min: 1000, max: 9999};
 const delta = range.max - range.min;
 const employeeId = (Math.round(range.min + Math.random() * delta)).toString();
 
-export const getEmployee = (): employeeAPIBody => {
+export const getEmployee = (): EmployeeAPIBody => {
     return {
         firstName: "Rahaf",
         middleName: "Suliman",
@@ -14,7 +14,7 @@ export const getEmployee = (): employeeAPIBody => {
     }
 };
 
-export const getUser = (): userAPIBody => {
+export const getUser = (): UserAPIBody => {
     return {
         username: getPrefix()+"rahaf",
         password: "rahaf123",

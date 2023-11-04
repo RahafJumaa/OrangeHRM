@@ -1,11 +1,11 @@
-export interface employeeAPIBody {
+export interface EmployeeAPIBody {
     firstName : string;
     middleName : string;
     lastName : string;
     employeeId: string;
 }
 
-export interface userAPIBody {
+export interface UserAPIBody {
     username : string;
     password : string;
     userRoleId : number;
@@ -13,11 +13,11 @@ export interface userAPIBody {
     empNumber: string ;
 }
 
-export interface deleteAPIBody {
+export interface DeleteAPIBody {
     "ids" : string[]
 }
 
-export interface updateAPIBody {
+export interface UpdateAPIBody {
     empNumber: string,
     lastName: string,
     firstName: string,

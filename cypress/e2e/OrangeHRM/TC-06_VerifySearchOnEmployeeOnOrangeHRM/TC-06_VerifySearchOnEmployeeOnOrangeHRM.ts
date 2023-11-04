@@ -2,7 +2,7 @@ import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import EmployeePageActions from "../../pageObjects/OrangeHRMEmployeePage/actions";
 import EmployeePageAssertions from "../../pageObjects/OrangeHRMEmployeePage/assertions";
 import EmployeePageDataUtils from "../../pageObjects/OrangeHRMEmployeePage/dataUtils";
-import {deleteAPIBody} from "../../../support/EmolyeeTypes/types";
+import {DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
 import { getEmployee } from "cypress/e2e/Common/OrangeHRMEmployeePage/dataFaker";
 
 const searchEmployeeActions : EmployeePageActions = new EmployeePageActions();
@@ -11,10 +11,10 @@ const employeeAPI = new EmployeePageDataUtils();
 const employee = getEmployee();
 
 let  empNumber: string ;
-let deleteEmployee :deleteAPIBody;
+let deleteEmployee :DeleteAPIBody;
 
 Given("the user add a new employee", () => {
-    employeeAPI.CreateEmployee(employee).then((response)=>
+    employeeAPI.createEmployee(employee).then((response)=>
     {
       empNumber = response.data.empNumber;
 });
@@ -37,5 +37,5 @@ When("the user search on the added employee by name and id", () => {
 });
 
 after(() => {
-    employeeAPI.deleteEmployee(employee.employeeId,deleteEmployee ={"ids" : [empNumber]});
+    employeeAPI.deleteEmployee(employee.employeeId);
  });

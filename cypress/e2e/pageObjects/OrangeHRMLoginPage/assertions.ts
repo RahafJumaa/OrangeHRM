@@ -24,7 +24,6 @@ class assertions{
  checkResetPasswordHeaderAppear (){
     cy.get("h6").contains("Reset Password").should('be.visible');
 }
-
 }
 export default assertions
 

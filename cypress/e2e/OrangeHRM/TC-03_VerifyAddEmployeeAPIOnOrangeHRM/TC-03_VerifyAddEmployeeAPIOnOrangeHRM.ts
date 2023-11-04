@@ -2,7 +2,7 @@ import { Given,When,Then } from "@badeball/cypress-cucumber-preprocessor";
 import EmployeePageDataUtils from "../../pageObjects/OrangeHRMEmployeePage/dataUtils";
 import EmployeePageActions from "../../pageObjects/OrangeHRMEmployeePage/actions";
 import EmployeePageAssertions from "../../pageObjects/OrangeHRMEmployeePage/assertions";
-import {deleteAPIBody} from "../../../support/EmolyeeTypes/types";
+import {DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
 import {getEmployee,getUser} from "../../Common/OrangeHRMEmployeePage/dataFaker";
 
 const addEmployeeActions : EmployeePageActions = new EmployeePageActions();
@@ -12,25 +12,25 @@ const employee = getEmployee();
 
 let  empNumber: string ;
 let user = getUser();
-let deleteEmployee : deleteAPIBody;
+let deleteEmployee : DeleteAPIBody;
 
 Given("the user navigate to Add employee page", () => {
   addEmployeeActions.NavigateToAddEmployeePage();
   });
 
 When("the user add a new employee without create login details", () => {
-  employeeAPI.CreateEmployee(employee).then((response)=>
+  employeeAPI.createEmployee(employee).then((response)=>
     {
       empNumber = response.data.empNumber;
     });
   });
 
 When("the user add a new employee with create login details", () => {
-  employeeAPI.CreateEmployee(employee).then((response)=>
+  employeeAPI.createEmployee(employee).then((response)=>
   {
     empNumber = response.data.empNumber;
     user = {...getUser(), empNumber: empNumber};
-    employeeAPI.CreateUser(user);
+    employeeAPI.createUser(user);
 })
 });
 
@@ -43,5 +43,5 @@ Then("the emolyee should be added successfully", () => {
 });
 
 afterEach(() => {
-  employeeAPI.deleteEmployee(employee.employeeId,deleteEmployee ={"ids" : [empNumber]});
+  employeeAPI.deleteEmployee(employee.employeeId);
 });
