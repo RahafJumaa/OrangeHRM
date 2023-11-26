@@ -1,9 +1,9 @@
 import {Given, Then, When , And} from "@badeball/cypress-cucumber-preprocessor";
-import actions from "../../pageObjects/OrangeHRMLoginPage/actions";
-import assertions from "../../pageObjects/OrangeHRMLoginPage/assertions";
+import LoginPageActions from "../../pageObjects/OrangeHRMLoginPage/actions";
+import LoginPageAssertions from "../../pageObjects/OrangeHRMLoginPage/assertions";
 
-const loginActions = new actions();
-const loginAssertions = new assertions();
+const loginActions = new LoginPageActions();
+const loginAssertions = new LoginPageAssertions();
 
 Then("The login page should be open correctly", () => {
   loginAssertions.checkOrangeHRMLogo().checkLoginTitle();

@@ -1,49 +1,47 @@
 import { Given,When,Then } from "@badeball/cypress-cucumber-preprocessor";
-import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
-import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
-import {EmployeeAPIBody,UserAPIBody} from "../../../support/types";
+import EmployeePageDataUtils from "../../pageObjects/OrangeHRMEmployeePage/dataUtils";
+import EmployeePageActions from "../../pageObjects/OrangeHRMEmployeePage/actions";
+import EmployeePageAssertions from "../../pageObjects/OrangeHRMEmployeePage/assertions";
+import {DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
+import {getEmployee,getUser} from "../../Common/OrangeHRMEmployeePage/dataFaker";
 
-const addEmployeeActions : actions = new actions();
-const addEmployeeAPI = new api();
-const range = {min: 1000, max: 9999};
-const delta = range.max - range.min;
-const employeeId = (Math.round(range.min + Math.random() * delta)).toString();
-const username = (Math.random() + 1).toString(36).substring(2);
+const addEmployeeActions : EmployeePageActions = new EmployeePageActions();
+const addEmployeeAssertions : EmployeePageAssertions = new EmployeePageAssertions();
+const employeeAPI = new EmployeePageDataUtils();
+const employee = getEmployee();
+
 let  empNumber: string ;
-let createEmployee : EmployeeAPIBody;
-createEmployee = {
-  firstName : "Rahaf",
-  middleName : "Suliman",
-  lastName : "Jumaa",
-  employeeId : employeeId,
-};
-let createUser : UserAPIBody;
+let user = getUser();
+let deleteEmployee : DeleteAPIBody;
 
 Given("the user navigate to Add employee page", () => {
-  addEmployeeAPI.NavigateToAddEmployeePage();
   addEmployeeActions.NavigateToAddEmployeePage();
   });
 
 When("the user add a new employee without create login details", () => {
-    addEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee);
+  employeeAPI.createEmployee(employee).then((response)=>
+    {
+      empNumber = response.data.empNumber;
+    });
   });
 
 When("the user add a new employee with create login details", () => {
-  addEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
+  employeeAPI.createEmployee(employee).then((response)=>
   {
     empNumber = response.data.empNumber;
-    addEmployeeAPI.AddEmployeeWithCreateLoginDetails(
-    createUser = {
-    username : username,
-    password : "rahaf123",
-    userRoleId : 2,
-    status : true,
-    empNumber: empNumber,
-  });
+    user = {...getUser(), empNumber: empNumber};
+    employeeAPI.createUser(user);
 })
-    
-  });
+});
+
+When("the user navigate to Employee List page", () => {
+    addEmployeeActions.NavigateToEmployeeListPage();
+});
 
 Then("the emolyee should be added successfully", () => {
-    addEmployeeAPI.checkPersonalDerails(employeeId,empNumber);
-  });
+    addEmployeeAssertions.checkTheEmployeeRecord([employee.employeeId,"Rahaf","Jumaa"],true);
+});
+
+afterEach(() => {
+  employeeAPI.deleteEmployee(employee.employeeId);
+});

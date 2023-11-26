@@ -1,48 +1,31 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
-import actions from "../../pageObjects/OrangeHRMAddEmployee/actions";
-import assertions from "../../pageObjects/OrangeHRMAddEmployee/assertions";
-import api from "../../pageObjects/OrangeHRMAddEmployee/dataUtils";
-import {EmployeeAPIBody,DeleteAPIBody, DeleteAPIResponse} from "../../../support/types";
+import EmployeePageActions from "../../pageObjects/OrangeHRMEmployeePage/actions";
+import EmployeePageAssertions from "../../pageObjects/OrangeHRMEmployeePage/assertions";
+import EmployeePageDataUtils from "../../pageObjects/OrangeHRMEmployeePage/dataUtils";
+import {DeleteAPIBody} from "../../../support/EmolyeeTypes/types";
+import {getEmployee} from "../../Common/OrangeHRMEmployeePage/dataFaker";
 
-const deleteEmployeeActions : actions = new actions();
-const deleteEmployeeAssertions : assertions = new assertions();
-const addEmployeeAPI = new api();
-const deleteEmployeeAPI = new api();
-const range = {min: 1000, max: 9999};
-const delta = range.max - range.min;
-const employeeId = (Math.round(range.min + Math.random() * delta)).toString();
-const username = (Math.random() + 1).toString(36).substring(2);
+const deleteEmployeeActions : EmployeePageActions = new EmployeePageActions();
+const deleteEmployeeAssertions : EmployeePageAssertions = new EmployeePageAssertions();
+const employeeAPI = new EmployeePageDataUtils();
+const employee = getEmployee();
 
 let  empNumber: string ;
-let createEmployee : EmployeeAPIBody;
-createEmployee = {
-  firstName : "Rahaf",
-  middleName : "Suliman",
-  lastName : "Jumaa",
-  employeeId : employeeId,
-};
 let deleteEmployee : DeleteAPIBody;
-let deleteEmployeeResponse : DeleteAPIResponse;
 
 Given("the user navigate to Add Employee page", () => {
     deleteEmployeeActions.NavigateToAddEmployeePage();
 });
 
 Given("the user add a new employee", () => {
-    addEmployeeAPI.AddEmployeeWithoutCreateLoginDetails(createEmployee).then((response)=>
+    employeeAPI.createEmployee(employee).then((response)=>
     {
       empNumber = response.data.empNumber;
 });
 });
   
 When("the user delete the added employee", () => {
-    deleteEmployeeAPI.DeleteEmployee(
-        deleteEmployee = {
-            "ids" : [empNumber]
-        },
-        deleteEmployeeResponse = {
-            "data" : [empNumber]
-        });
+    employeeAPI.deleteEmployee(employee.employeeId);
 });
 
 When("the user navigate to Employee List page", () => {
@@ -50,5 +33,5 @@ When("the user navigate to Employee List page", () => {
 });
 
 Then("the employee should be deleted successfully", () => {
-    deleteEmployeeAssertions.checkTheEmployeeRecordNotAppear(employeeId);
+    deleteEmployeeAssertions.checkTheEmployeeRecord([employee.employeeId,"Rahaf","Jumaa"],false);
 });

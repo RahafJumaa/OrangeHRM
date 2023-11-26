@@ -1,4 +1,4 @@
-class assertions{
+class EmployeePageAssertions{
     checkAddEmployeeTitle (){
         cy.get("h6").contains("Add Employee").should('be.visible');
     } 
@@ -36,9 +36,15 @@ class assertions{
         cy.get("span").contains("Should have at least 7 characters").should('be.visible');
     }
 
-    checkTheEmployeeRecordNotAppear(id:string){
-        cy.wait(7000);
-        cy.get('.oxd-table-cell').contains(id).should('not.exist');
+    checkTheEmployeeRecord(employeeRow: [id : string , firstName : string , lastName : string], isExist: boolean){   
+        employeeRow.forEach((value) => {
+            if(isExist){
+            cy.get('.oxd-table-row').get('.oxd-table-cell').contains(value).should('exist'); 
+            }
+            else{
+                cy.get('.oxd-table-row').get('.oxd-table-cell').contains(value).should('not.exist'); 
+            }
+        })
     }
 }
-export default assertions
+export default EmployeePageAssertions

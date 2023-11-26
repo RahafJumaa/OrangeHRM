@@ -1,4 +1,4 @@
-class actions{
+class EmployeePageActions{
     navigateToAddEmployeePage(){
         cy.get("span").contains("PIM").click();
         cy.get("button").contains("Add").click();
@@ -50,11 +50,15 @@ class actions{
     }
 
     NavigateToAddEmployeePage(){
-        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/addEmployee");
+        cy.visit("/pim/addEmployee");
     }
 
-    NavigateToEmployeeListPage(){
-        cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList");
+    NavigateToEmployeeListPage(){ 
+        cy.visit("/pim/viewEmployeeList");
+    }
+
+    NavigateToPersonalDetailsPage(empNumber : string){
+        cy.visit("/pim/viewPersonalDetails/empNumber/"+empNumber+"");
     }
 }
-export default actions
+export default EmployeePageActions
